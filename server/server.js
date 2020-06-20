@@ -11,7 +11,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.get('/', function(req, res) {
-    res.json('Hello World');
+    let msj = 'Corriendo en ';
+
+    if (process.env.PORT === '3000') {
+        msj += 'Desarrollo.';
+    } else {
+        msj += 'Producción.';
+    }
+
+    res.json({ msj, port: process.env.PORT });
 });
 
 app.get('/usuario', (req, res) => {
