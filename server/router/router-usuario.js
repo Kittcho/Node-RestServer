@@ -3,6 +3,8 @@ const app = express();
 const bcrypt = require('bcrypt');
 const _ = require('underscore');
 
+const { ValidaUsuario, VerificaAdminRole } = require('../middleware/aunteticacion');
+
 // MODELO
 let Usuario = require('../models/model-usuario');
 
@@ -20,7 +22,7 @@ app.get('/', function(req, res) {
     res.json({ msj, port: process.env.PORT });
 });
 
-app.get('/usuario', (req, res) => {
+app.get('/usuario', ValidaUsuario, (req, res) => {
 
     let desde = Number(req.query.desde) || 0;
     let limite = Number(req.query.limite) || 5;
@@ -61,7 +63,7 @@ app.get('/usuario', (req, res) => {
         });
 });
 
-app.post('/usuario', (req, res) => {
+app.post('/usuario', [ValidaUsuario, VerificaAdminRole], (req, res) => {
 
     let body = req.body;
 
@@ -87,7 +89,7 @@ app.post('/usuario', (req, res) => {
         });
 });
 
-app.put('/usuario/:id', (req, res) => {
+app.put('/usuario/:id', [ValidaUsuario, VerificaAdminRole], (req, res) => {
 
     let id = req.params.id;
     let body = _.pick(req.body, ['nombre', 'email', 'role', 'estado']);
@@ -111,7 +113,7 @@ app.put('/usuario/:id', (req, res) => {
     });
 });
 
-app.delete('/usuario/:id', (req, res) => {
+app.delete('/usuario/:id', [ValidaUsuario, VerificaAdminRole], (req, res) => {
 
     let id = req.params.id;
 

@@ -11,10 +11,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
-// utilizo las rutas creadas en router-usuario.js
-app.use(require('./router/router-usuario'));
-
-
+// Configuración global de rutas
+app.use(require('./router/index'));
 
 app.listen(process.env.PORT, () => {
     console.log("Escuchando puerto: ", process.env.PORT);

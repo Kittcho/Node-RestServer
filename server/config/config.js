@@ -15,3 +15,9 @@ if (process.env.NODE_ENV === 'dev') {
 }
 
 process.env.URL_DB = conexion;
+
+// Vigencia token
+process.env.CADUCIDAD_TOKEN = process.env.CADUCIDAD_TOKEN || "1h";
+
+// Seed de validación de token
+process.env.SEED = process.env.SEED || 'este-es-el-seed-de-desarrollo';
