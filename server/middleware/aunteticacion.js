@@ -39,6 +39,10 @@ let VerificaAdminRole = (req, res, next) => {
 };
 
 
+
+
+
+
 module.exports = {
     ValidaUsuario,
     VerificaAdminRole

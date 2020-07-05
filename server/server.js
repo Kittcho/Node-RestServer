@@ -2,6 +2,7 @@ require('./config/config');
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
+const path = require('path');
 
 const bodyParser = require('body-parser');
 
@@ -13,6 +14,9 @@ app.use(bodyParser.json());
 
 // Configuración global de rutas
 app.use(require('./router/index'));
+
+// Exponer página principal
+app.use(express.static(path.resolve(__dirname, '../public')));
 
 app.listen(process.env.PORT, () => {
     console.log("Escuchando puerto: ", process.env.PORT);

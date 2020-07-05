@@ -10,7 +10,7 @@ let Usuario = require('../models/model-usuario');
 
 // PETICIONES REST
 
-app.get('/', function(req, res) {
+app.get('/run', function(req, res) {
     let msj = 'Corriendo en ';
 
     if (process.env.PORT === '3000') {
