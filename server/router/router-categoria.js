@@ -6,7 +6,11 @@ let Categoria = require('../models/model-categoria');
 
 
 app.get('/categoria', ValidaUsuario, (req, res) => {
-    Categoria.find({}, (err, categoria) => {
+
+    Categoria.find({})
+    .populate('usuario', 'nombre email')
+    .sort('descripcion')
+    .exec((err, categoria) => {
         if (err) {
             return res.status(500)
                 .json({
