@@ -8,18 +8,9 @@ let Categoria = require('../models/model-categoria');
 app.get('/categoria', ValidaUsuario, (req, res) => {
 
     Categoria.find({})
-    .populate('usuario', 'nombre email')
-    .sort('descripcion')
-    .exec((err, categoria) => {
-        if (err) {
-            return res.status(500)
-                .json({
-                    ok: false,
-                    err
-                });
-        }
-
-        Categoria.count({}, (err, count) => {
+        .populate('usuario', 'nombre email')
+        .sort('descripcion')
+        .exec((err, categoria) => {
             if (err) {
                 return res.status(500)
                     .json({
@@ -28,13 +19,22 @@ app.get('/categoria', ValidaUsuario, (req, res) => {
                     });
             }
 
-            res.json({
-                ok: true,
-                count,
-                categoria
+            Categoria.count({}, (err, count) => {
+                if (err) {
+                    return res.status(500)
+                        .json({
+                            ok: false,
+                            err
+                        });
+                }
+
+                res.json({
+                    ok: true,
+                    count,
+                    categoria
+                });
             });
         });
-    });
 });
 
 app.get('/categoria/:id', ValidaUsuario, (req, res) => {
@@ -97,7 +97,7 @@ app.put('/categoria/:id', [ValidaUsuario, VerificaAdminRole], (req, res) => {
     let descripcion = req.body.descripcion;
     let _id = req.usuario._id;
 
-    Categoria.findByIdAndUpdate(id, { descripcion, usuario: _id }, { new: true }, (err, categoriaBd) => {
+    Categoria.findByIdAndUpdate(id, { descripcion, usuario: _id }, { new: true, runValidators: true }, (err, categoriaBd) => {
         if (err) {
             return res.status(500)
                 .json({
