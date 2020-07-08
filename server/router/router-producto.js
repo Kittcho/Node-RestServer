@@ -17,14 +17,14 @@ app.get('/productos', (req, res) => {
     let desde = Number(req.query.desde) || 0;
     let limite = Number(req.query.limite) || 5;
 
-    Producto.find({})
+    Producto.find({ disponible: true })
         .skip(desde)
         .limit(limite)
         .populate('usuario', 'nombre email')
         .populate('categoria', 'descripcion')
         .exec()
         .then((productos) => {
-            Producto.count({}, (err, count) => {
+            Producto.count({ disponible: true }, (err, count) => {
                 if (err) {
                     return res.status(500)
                         .json({
@@ -89,6 +89,34 @@ app.get('/productos/:id', (req, res) => {
 
 });
 
+
+//===========================
+// Buscar producto
+//===========================
+app.get('/productos/buscar/:termino', ValidaUsuario, (req, res) => {
+
+    let termino = req.params.termino;
+
+    let regEx = new RegExp(termino, 'i');
+
+    console.log(regEx);
+
+    Producto.find({ nombre: regEx }, (err, productosDb) => {
+        if (err) {
+            return res.status(500)
+                .json({
+                    ok: false,
+                    err
+                });
+        }
+
+        res.json({
+            ok: true,
+            productos: productosDb
+        });
+    });
+
+});
 
 //===========================
 // Crear un nuevo producto
